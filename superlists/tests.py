@@ -7,29 +7,28 @@ from django.test import override_settings
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-
 @override_settings(ALLOWED_HOSTS=['*'])
 class BaseTestCase(StaticLiveServerTestCase):
-    """
-    Provides base test class which connects to the Docker
-    container running selenium.
-    """
-    host = '0.0.0.0'
+	"""
+	Provides base test class which connects to the Docker
+	container running selenium.
+	"""
+	host = '0.0.0.0'
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.host = socket.gethostbyname(socket.gethostname())
-        cls.selenium = webdriver.Remote(
-            command_executor='http://selenium:4444/wd/hub',
-            desired_capabilities=DesiredCapabilities.CHROME,
-        )
-        cls.selenium.implicitly_wait(5)
+	@classmethod
+	def setUpClass(cls):
+		super().setUpClass()
+		cls.host = socket.gethostbyname(socket.gethostname())
+		cls.selenium = webdriver.Remote(
+			command_executor='http://selenium:4444/wd/hub',
+			desired_capabilities=DesiredCapabilities.CHROME,
+		)
+		cls.selenium.implicitly_wait(5)
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super().tearDownClass()
+	@classmethod
+	def tearDownClass(cls):
+		cls.selenium.quit()
+		super().tearDownClass()
 
 
 class homeTest(BaseTestCase):
@@ -39,5 +38,6 @@ class homeTest(BaseTestCase):
 		"""
 		Should open django admin page
 		"""
-		self.selenium.get("{}{}".format(self.live_server_url,'/admin'))
-		self.assertIn('Django', self.selenium.title)
+		# self.selenium.get("{}{}".format(self.live_server_url,'/admin'))
+		self.selenium.get(self.live_server_url)
+		self.assertIn('To-Do', self.selenium.title)
