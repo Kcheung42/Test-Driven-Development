@@ -1,5 +1,5 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.test import override_settings
+from django.test import override_settings, tag
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
@@ -19,6 +19,7 @@ class BaseTestCase(StaticLiveServerTestCase):
     os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8000'
     # host = '0.0.0.0'
 
+    @tag('selenium')
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -30,6 +31,7 @@ class BaseTestCase(StaticLiveServerTestCase):
         cls.live_server_url = 'http://{}:8000'.format(cls.host)
         cls.browser.implicitly_wait(5)
 
+    @tag('selenium')
     @classmethod
     def tearDownClass(cls):
         cls.browser.quit()
@@ -44,6 +46,7 @@ class NewVisitorTest(BaseTestCase):
         self.assertIn(row_text ,[row.text for row in rows])
 
 
+    @tag('selenium')
     def test_can_start_a_list_and_retrieve_it_later(self):
         """
         Edith has heard about a cool new online to-do app. She goes
