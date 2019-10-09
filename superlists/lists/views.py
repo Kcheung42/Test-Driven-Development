@@ -11,10 +11,13 @@ from django.views.decorators.csrf import csrf_exempt
 # TODO: every post request creates empty list. Fix this
 @csrf_exempt
 def home_page(request):
-    item = Item()
-    item.text = request.POST.get('item_text', '')
-    item.save()
+    if request.method == 'POST':
+        new_item_text = request.POST['item_text']
+        Item.objects.create(text=new_item_text)
+    else:
+        new_item_text = ''
+
     context = {
-        'new_item_text': request.POST.get('item_text',''),
+        'new_item_text': new_item_text,
     }
     return render(request, 'home.html', context)
