@@ -10,16 +10,16 @@ import os
 import unittest
 
 @override_settings(ALLOWED_HOSTS=['*'])
+@tag('selenium')
 class BaseTestCase(StaticLiveServerTestCase):
     """
     Provides base test class which connects to the Docker
     container running selenium.
     """
 
-    os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8000'
-    # host = '0.0.0.0'
+    # os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8000'
+    host = '0.0.0.0'
 
-    @tag('selenium')
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -31,7 +31,6 @@ class BaseTestCase(StaticLiveServerTestCase):
         cls.live_server_url = 'http://{}:8000'.format(cls.host)
         cls.browser.implicitly_wait(5)
 
-    @tag('selenium')
     @classmethod
     def tearDownClass(cls):
         cls.browser.quit()
@@ -40,13 +39,13 @@ class BaseTestCase(StaticLiveServerTestCase):
 
 class NewVisitorTest(BaseTestCase):
 
+
     def check_for_row_in_list_table(self, row_text):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertIn(row_text ,[row.text for row in rows])
+        self.assertIn(row_text, [row.text for row in rows])
 
 
-    @tag('selenium')
     def test_can_start_a_list_and_retrieve_it_later(self):
         """
         Edith has heard about a cool new online to-do app. She goes
