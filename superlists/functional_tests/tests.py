@@ -88,6 +88,6 @@ class NewVisitorTest(BaseTestCase):
         # rows = table.find_elements_by_tag_name('tr') #notice elements plural
 
         self.check_for_row_in_list_table('1: Buy peacock feathers')
-        self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
+        # self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
         self.fail('Finish the test!')
