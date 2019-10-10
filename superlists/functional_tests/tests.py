@@ -1,4 +1,4 @@
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.test import override_settings, tag
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -11,7 +11,7 @@ import unittest
 
 @override_settings(ALLOWED_HOSTS=['*'])
 @tag('selenium')
-class BaseTestCase(StaticLiveServerTestCase):
+class BaseTestCase(LiveServerTestCase):
     """
     Provides base test class which connects to the Docker
     container running selenium.
@@ -28,7 +28,7 @@ class BaseTestCase(StaticLiveServerTestCase):
             command_executor='http://selenium:4444/wd/hub',
             desired_capabilities=DesiredCapabilities.CHROME,
         )
-        cls.live_server_url = 'http://{}:8000'.format(cls.host)
+        # cls.live_server_url = 'http://{}:8000'.format(cls.host)
         cls.browser.implicitly_wait(5)
 
     @classmethod

@@ -19,3 +19,11 @@ docker exec -it django python3 manage.py test --tag=selenium
 ```
 docker exec -it django python3 manage.py test --exclude-tag=selenium 
 ```
+
+### TODO
+
+  * ~~Don't save black items for request~~
+  * Code smells: POST test is too long
+  * Display multiple items in the table
+  * Support more than one list
+
