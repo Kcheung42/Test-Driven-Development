@@ -8,13 +8,19 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
-# TODO: every post request creates empty list. Fix this
-@csrf_exempt
+# @csrf_exempt
 def home_page(request):
     if request.method == 'POST':
         Item.objects.create(text=request.POST['item_text'])
-        return redirect('/')
+        return redirect('/lists/the-only-list-in-the-world')
 
+    items = Item.objects.all()
+    context = {
+        'items' : items
+    }
+    return render(request, 'home.html', context)
+
+def view_list(request):
     items = Item.objects.all()
     context = {
         'items' : items
