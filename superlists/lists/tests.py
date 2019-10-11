@@ -67,6 +67,11 @@ class ItemModelTest(TestCase):
         self.assertEqual(second_saved.text,'Second item ever!' )
 
 class LiveViewTestCase(TestCase):
+
+    def test_uses_list_template(self):
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+        self.assertTemplateUsed(response, 'list.djhtml')
+
     def test_displays_all_items(self):
         Item.objects.create(text='itemy 1')
         Item.objects.create(text='itemy 2')
