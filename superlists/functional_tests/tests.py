@@ -1,5 +1,5 @@
 from django.contrib.staticfiles.testing import LiveServerTestCase
-from django.test import override_settings, tag
+from django.test import override_settings
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
@@ -10,7 +10,6 @@ import os
 import unittest
 
 @override_settings(ALLOWED_HOSTS=['*'])
-@tag('selenium')
 class BaseTestCase(LiveServerTestCase):
     """
     Provides base test class which connects to the Docker
@@ -21,20 +20,21 @@ class BaseTestCase(LiveServerTestCase):
     host = '0.0.0.0'
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(self):
         super().setUpClass()
-        cls.host = socket.gethostbyname(socket.gethostname())
-        cls.browser = webdriver.Remote(
+        self.host = socket.gethostbyname(socket.gethostname())
+        self.browser = webdriver.Remote(
             command_executor='http://selenium:4444/wd/hub',
             desired_capabilities=DesiredCapabilities.CHROME,
         )
-        # cls.live_server_url = 'http://{}:8000'.format(cls.host)
-        cls.browser.implicitly_wait(5)
+        # self.live_server_url = 'http://{}:8000'.format(self.host)
+        self.browser.implicitly_wait(5)
+
 
     @classmethod
-    def tearDownClass(cls):
-        cls.browser.quit()
+    def tearDownClass(self):
         super().tearDownClass()
+        self.browser.quit()
 
 
 class NewVisitorTest(BaseTestCase):
@@ -102,11 +102,14 @@ class NewVisitorTest(BaseTestCase):
         dev-note: We use a new browswer session to make sure no information of
         Edith's list is coming through from cookies etc.
         """
-        self.browser.quit()
+        self.browser.close()
+
+        # self.host = socket.gethostbyname(socket.gethostname())
         self.browser = webdriver.Remote(
                     command_executor='http://selenium:4444/wd/hub',
                     desired_capabilities=DesiredCapabilities.CHROME,
                 )
+        # self.browser.implicitly_wait(5)
 
         # Francis vists the home page, there is no signs of Edith's list
         self.browser.get(self.live_server_url)

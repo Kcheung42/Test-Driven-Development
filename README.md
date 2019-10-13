@@ -27,5 +27,5 @@ docker exec -it django python3 manage.py test --exclude-tag=selenium
   * ~~Display multiple items in the table~~
   * Adjust models so that items are associated with different lists
   * Add Unique URLs for each list
-  * Add new URL for creating a new list via POST
+  * ~~Add new URL for creating a new list via POST~~
   * Add URLs for adding new items to a list via POST

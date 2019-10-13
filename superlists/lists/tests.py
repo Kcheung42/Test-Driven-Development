@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.shortcuts import render
 
 
-from lists.models import Item
+from lists.models import Item, List
 
 class HomePageTest(TestCase):
     def test_root_url_resolves_to_home_page_view(self):
@@ -42,22 +42,33 @@ class NewListTest(TestCase):
 
 
 
-class ItemModelTest(TestCase):
+class ListandItemModelTest(TestCase):
+
     def test_saving_and_retrieving_items(self):
+        list_ = List()
+        list_.save()
+
         first_item = Item()
         first_item.text = 'First item ever!'
+        first_item.list = list_
         first_item.save()
 
         second_item = Item()
         second_item.text = 'Second item ever!'
+        second_item.list = list_
         second_item.save()
+
+        saved_list = List.objects.first()
+        self.assertEqual(saved_list, list_)
 
         saved_items = Item.objects.all()
         self.assertEqual(saved_items.count(), 2)
         first_saved = saved_items[0]
         second_saved = saved_items[1]
         self.assertEqual(first_saved.text,'First item ever!' )
+        self.assertEqual(first_saved.list, list_)
         self.assertEqual(second_saved.text,'Second item ever!' )
+        self.assertEqual(second_saved.list , list_)
 
 
 class LiveViewTestCase(TestCase):
@@ -67,8 +78,9 @@ class LiveViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'list.djhtml')
 
     def test_displays_all_items(self):
-        Item.objects.create(text='itemy 1')
-        Item.objects.create(text='itemy 2')
+        list_ = List.objects.create()
+        Item.objects.create(text='itemy 1', list=list_)
+        Item.objects.create(text='itemy 2', list=list_)
 
         response = self.client.get('/lists/the-only-list-in-the-world/')
         self.assertContains(response, 'itemy 1')
