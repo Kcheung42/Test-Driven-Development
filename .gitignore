@@ -4,3 +4,4 @@ __pycache__
 *.swp
 *.md.temp
 README.html
+superlists/lists/migrations/
