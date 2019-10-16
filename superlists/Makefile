@@ -14,3 +14,6 @@ docker-test-unit:
 
 docker-migration:
 	docker exec -it django python3 manage.py makemigrations
+
+docker-migrate:
+	docker exec -it django python3 manage.py migrate --run-syncdb
