@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def home_page(request):
-    return render(request, 'home.html')
+    return render(request, 'home.djhtml')
 
 
 def view_list(request, list_id):

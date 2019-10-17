@@ -60,7 +60,7 @@ class NewVisitorTest(BaseTestCase):
 
 
         # He is invited to enter a to-do item straight away
-        nputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Enter a to-do item'
