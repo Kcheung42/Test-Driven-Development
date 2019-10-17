@@ -1,4 +1,4 @@
-from django.contrib.staticfiles.testing import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import override_settings
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -10,7 +10,7 @@ import os
 import unittest
 
 @override_settings(ALLOWED_HOSTS=['*'])
-class BaseTestCase(LiveServerTestCase):
+class BaseTestCase(StaticLiveServerTestCase):
     """
     Provides base test class which connects to the Docker
     container running selenium.
@@ -41,6 +41,7 @@ class NewVisitorTest(BaseTestCase):
 
 
     def check_for_row_in_list_table(self, row_text):
+        """Helper function"""
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
@@ -49,7 +50,6 @@ class NewVisitorTest(BaseTestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Kenny has heard about a cool new online to-do app. He goes
         # to check it out
-        # self.browser.get("{}{}".format(self.live_server_url,'/admin'))
         self.browser.get(self.live_server_url)
 
 
