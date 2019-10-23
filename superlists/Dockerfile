@@ -1,10 +1,10 @@
 FROM python:3.6.2
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir /code
-WORKDIR /code
-ADD requirements.txt /code/
+WORKDIR /usr/src/app
+ADD requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
-ADD . /code
+COPY . /usr/src/app
 
-ENTRYPOINT ["/code/entrypoint.sh"]
+CMD ["/usr/src/app/entrypoint.sh"]
+

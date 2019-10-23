@@ -48,7 +48,7 @@ services:
       context: ./superlists
       dockerfile: Dockerfile
     volumes:
-      - ./superlists:/code
+      - ./superlists:/usr/src/app
     links:
       - selenium
     ports:
@@ -60,16 +60,3 @@ services:
     ports:
       - 4444:4444
       - 5900:5900
-
-  nginx:
-    container_name: nginx
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 80:80
-    depends_on:
-      - django
-
-
