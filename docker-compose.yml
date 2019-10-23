@@ -47,9 +47,8 @@ services:
     build:
       context: ./superlists
       dockerfile: Dockerfile
-    command: python manage.py runserver 0.0.0.0:80
     volumes:
-      - .:/code
+      - ./superlists:/code
     links:
       - selenium
     ports:
