@@ -8,6 +8,7 @@ import socket
 import time
 import os
 import unittest
+import sys
 
 @override_settings(ALLOWED_HOSTS=['*'])
 class BaseTestCase(StaticLiveServerTestCase):
@@ -16,29 +17,35 @@ class BaseTestCase(StaticLiveServerTestCase):
     container running selenium.
     """
 
-    # os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8000'
-    host = '0.0.0.0'
+    host = '0.0.0.0' # why do I need this to work?
 
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]
+                return
         super().setUpClass()
-        self.host = socket.gethostbyname(socket.gethostname())
+        cls.host = socket.gethostbyname(socket.gethostname())
+        cls.server_url = cls.live_server_url
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+
+    def setUp(self):
         self.browser = webdriver.Remote(
             command_executor='http://selenium:4444/wd/hub',
             desired_capabilities=DesiredCapabilities.CHROME,
         )
-        # self.live_server_url = 'http://{}:8000'.format(self.host)
         self.browser.implicitly_wait(5)
 
-
-    @classmethod
-    def tearDownClass(self):
-        super().tearDownClass()
+    def tearDown(self):
         self.browser.quit()
 
 
-class NewVisitorTest(BaseTestCase):
 
+class NewVisitorTest(BaseTestCase):
 
     def check_for_row_in_list_table(self, row_text):
         """Helper function"""
@@ -50,7 +57,7 @@ class NewVisitorTest(BaseTestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Kenny has heard about a cool new online to-do app. He goes
         # to check it out
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
 
 
         # He notices the page title and header mention to-do lists
@@ -103,7 +110,7 @@ class NewVisitorTest(BaseTestCase):
 
 
         # Bambi vists the home page, there is no signs of Kenny's list
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertNotIn('make a fly', page_text)
@@ -126,7 +133,7 @@ class NewVisitorTest(BaseTestCase):
 
     def test_layout_and_styling(self):
         # Kenny goes to the home page
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         self.browser.set_window_size(1024, 768)
 
         # He notices the input box is nicely centered
@@ -145,3 +152,20 @@ class NewVisitorTest(BaseTestCase):
             512,
             delta=6
             )
+
+    def test_cannot_add_empty_list_items(self):
+        # Kenny goes to the homepage and accidently tries to submit
+        # an empty list item. He hits Enter on the empty input box
+
+        # The home page refreshes and there is an error message saying
+        # the list item cannot be blank
+
+        # He tries again with another text, which now works
+
+        # He tries to submit another blank item
+
+        # He receives the same error message
+
+        # He can correct it by filling in some text
+
+        self.fail('finish writing me...')
